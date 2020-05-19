@@ -99,7 +99,7 @@ In our [Docker Hub](https://hub.docker.com) account we could see the two tags.
 
 ![My two tags](/images/docker_image_tags01.png)
 
-Ok, let's test if all would work as we wish. We will delete all the containers and images and we will deploy aour archonweb:v2 in a new container.
+OK, let's test if all would work as we wish. We will delete all the containers and images and we will deploy our archonweb:v2 in a new container.
 
 ``` bash
 docker stop $(docker ps -a -q)
@@ -131,7 +131,7 @@ docker inspect ArchonWeb
 ]
 ```
 
-After starting our docker container we would see our apache default page throught port 8080 in our docker host.
+After starting our docker container we would see our apache default page through port 8080 in our docker host.
 
 **Using Dockerfile to create images**
 
@@ -172,7 +172,7 @@ CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
 
 This Docker file will create a new image **FROM** our archonweb:latest current image, it will update our packages (using **RUN** Docker will execute commands inside our image). The Dockerfile defines the open ports that will be open too. Finally, tt sets the image command for starting apache2 when the container starts.
 
-Build the image form using dockerfile
+Build the image form using Dockerfile
 ``` bash
 docker build -t YOUR_USERNAME/archonweb:v2 .
 docker images
@@ -185,7 +185,7 @@ acastellano/archonweb    latest              c739c75c3b8e        12 days ago    
 docker create --name ArchonWeb --hostname ArchonWeb -p 8080:80 -i YOUR_USERNAME/archonweb:v2
 ```
 
-If we start our new ArchonWeb contaiter it will work in the same way as before.
+If we start our new ArchonWeb container it will work in the same way as before.
 
 As we did before we can commit the image:
 
@@ -195,7 +195,7 @@ docker commit -m "Image created using a Dockerfile" -a "YOUR NAME" ArchonWeb YOU
 
 **Using volumes**
 
-So, we have a webserver without content. Next step would be create a website or webapp but there are a litle problem. If we enter inside our container and we try to update our index.html we will realize that this contaner doesn't have any text editor!
+So, we have a web server without content. Next step would be create a website or webapp but there is a little problem. If we enter inside our container and we try to update our index.html we will realize that this contaner doesn't have any text editor!
 ``` bash
 docker exec -i -t ArchonWeb /bin/bash
 vi /var/www/html/index.html
@@ -209,7 +209,7 @@ Why we don't have any editor? Don't lose your mind!
 
 Docker images should be as small as possible so it would be reasonable to have only essential packages installed. So please, don't install text editors or other tools that are not necessary for the main purpose of the image.
 
-We are going to use volumes. A volume is a local directory wich is mounted in our container, so we can edit files that the container can see. When we mount a volume in existing location it will be overwritten.
+We are going to use volumes. A volume is a local directory which is mounted in our container, so we can edit files that the container can see. When we mount a volume in existing location it will be overwritten.
 
 Inside our repository there are two folders: **apache2_sites_enabled** will be mounted in **/etc/apache2/sites-enabled** and **apache2_www** will be mounted in **/var/www**.
 
@@ -336,6 +336,7 @@ tree .
 ```
 
 This is our web app:
+**Composer_Archonweb_Index.php**
 ```
 <html>
 	<head>
@@ -376,6 +377,9 @@ This is our web app:
 </html>
 ```
 
+This app only counts how many tables are in our "##MYSQL_DATABASE##". The database values use ##'s strings because our container will set these values on start. How it will do it?
+
+Our new ArchonWeb will execute this script on start, let's see what it does:
 ```
 #!/bin/bash
 set -eo pipefail
@@ -407,15 +411,6 @@ sed -i -e "s/##MYSQL_PASSWORD##/$MYSQL_PASSWORD/g" /var/www/default/index.php
 sed -i -e "s/##MYSQL_HOST##/$MYSQL_HOST/g" /var/www/default/index.php
 
 /usr/sbin/apache2ctl -D FOREGROUND
-```
-
-This app only counts how many tables are in our "##MYSQL_DATABASE##". The database values use ##'s strings because our container will set these values on start. How it will do it?
-
-Our new ArchonWeb will execute this script on start, let's see what it does:
-```
-FROM acastellano/archonweb:v2
-MAINTAINER Álvaro Castellano Vela <alvaro.castellano.vela@gmail.com>
-EXPOSE 80
 ```
 
 When the container starts, this script checks if the required environment variables are set, after that it will modify the index.php and it will run apache2 web server.

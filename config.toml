@@ -1,6 +1,6 @@
 baseURL = "https://a-castellano.github.io/"
 languageCode = "en-us"
-title = "Personal Blog"
+title = "Álvaro Castellano - Personal Blog"
 theme = "github-style"
 
 [params]
@@ -9,4 +9,4 @@ theme = "github-style"
   github = "a-castellano"
   email = "alvaro.castellano.vela@gmail.com"
   avatar = "https://avatars0.githubusercontent.com/u/11519707?s=460&u=c9ea059a83c4ea6f9daddec4fff28b1afacbe85a&v=4"
-  url = "https://a-castellano.github.io/"
+  url = "https://www.linkedin.com/in/%C3%A1lvaro-castellano-vela-b2963182/"

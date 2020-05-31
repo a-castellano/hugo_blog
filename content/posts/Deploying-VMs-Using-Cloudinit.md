@@ -1,5 +1,5 @@
 ---
-title: "Deploying VM's using cloud-init."
+title: "Deploying VM's using cloud-init"
 date: 2020-05-31T23:09:07+02:00
 draft: false
 ---

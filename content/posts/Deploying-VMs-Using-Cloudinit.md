@@ -362,7 +362,7 @@ qm template 100
 
 Time to create a new VM using this new template:
 ```bash
-qm clone 100 123 --name Test
+qm clone 100 123 --name Test --full
 ```
 
 Let's resize disk before start the VM:

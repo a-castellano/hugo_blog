@@ -322,6 +322,23 @@ apt:
         -----END PGP PUBLIC KEY BLOCK-----
 ```
 
+### DNS config
+
+After cloning each template we will set Network configuration but we must configure systemd resolv in this step
+
+```yml
+write_files:
+- content: |
+
+    [Resolve]
+    DNS=10.XXX.YYY.10
+
+  path: /etc/systemd/resolved.conf
+  owner: root:root
+  permissions: '0644'
+
+```
+
 Entire Cloud-init file can be found [here](https://gist.github.com/a-castellano/49cee1dbf1f1e29c81d44536d98189a2).
 
 ## Creating a template VM
